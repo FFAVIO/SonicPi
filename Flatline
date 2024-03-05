@@ -1,0 +1,108 @@
+#song
+use_bpm 120
+
+hb = 2
+w = 2
+p = 0.75
+
+#intro
+define :intro do
+  sample :bd_fat, amp: hb
+  sleep p
+  sample :bd_fat, amp: hb
+  sleep w
+end
+
+#beat1
+define :beat1 do
+  sample :bd_ada, amp: 2
+  sleep 2
+  sample :bd_fat, amp: 2
+  sleep 2
+end
+
+#clap1
+define :clap1 do
+  sample :sn_generic
+  sleep 2
+end
+
+#bass1
+define :bass1 do
+  use_synth :tb303
+  with_fx :whammy,mix: 0.1 do
+    play 36, release: 0.2
+    sleep 0.5
+    play 38, release: 0.9
+    sleep 1.5
+    play 30, release: 0.2
+    sleep 0.5
+    play 34, release: 0.9
+    sleep 0.5
+  end
+end
+
+#intro start
+1.times do
+  intro
+end
+
+5.times do
+  intro
+  hb = hb - 0.2
+  w = w + 0.2
+  p = p + 0.05
+end
+
+sample :bd_fat, amp: hb
+
+#intro end
+
+sleep 4
+
+#beat start
+live_loop :beat do
+  20.times do
+    beat1
+  end
+  stop
+end
+
+sleep 9
+
+live_loop :clap do
+  33.times do
+    clap1
+  end
+  stop
+end
+
+sleep 10
+
+live_loop :bass do
+  19.times do
+    bass1
+  end
+  stop
+end
+
+sleep 6
+
+live_loop :r2 do
+  51.times do
+    sample :drum_heavy_kick
+    sleep 0.5
+    sample :drum_heavy_kick
+    sample :drum_snare_soft
+    sleep 0.5
+  end
+  stop
+end
+
+sleep 53
+
+with_fx :whammy, mix: 0.4 do
+  with_fx :krush do
+    sample "C:/Users/favio_jimenez/Desktop/Heartbeat flatline sound HD.mp3",amp: 0.25
+  end
+end
